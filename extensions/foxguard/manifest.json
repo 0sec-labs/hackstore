@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/0sec-labs/hackstore/main/hackstore-manifest.schema.json",
+  "id": "foxguard.scanner",
+  "name": "FoxGuard",
+  "version": "0.13.1",
+  "minCoreVersion": "0.16.0",
+  "tools": [
+    {
+      "name": "foxguard_scan",
+      "description": "Run a FoxGuard security scan over a path: 200+ SAST rules across 12 languages, secret detection, OSV-backed dependency scanning, and a post-quantum crypto audit. Returns a severity breakdown and each finding (file, line, rule, CWE, description). Requires the `foxguard` CLI on PATH (npx foxguard, pipx install foxguard, or https://foxguard.dev/install.sh).",
+      "parameters": {
+        "path": { "type": "string", "description": "File or directory to scan. Defaults to the current directory." },
+        "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"], "description": "Only return findings at or above this severity." }
+      },
+      "required": [],
+      "capabilities": ["process-exec", "filesystem-read"]
+    }
+  ]
+}

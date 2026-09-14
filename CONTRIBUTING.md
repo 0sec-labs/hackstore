@@ -15,7 +15,7 @@ extensions/your-extension/
 ```
 
 The manifest declares the tools. `plugin.js` is a self-contained Node.js program
-that speaks the [0sec plugin protocol](https://github.com/0sec-labs/0sec/blob/main/docs/HACKSTORE.md#wire-protocol).
+that speaks the [0sec plugin protocol](https://docs.0.security/hackstore/#wire-protocol).
 The README explains prerequisites, arguments, results, limits, and a working example.
 
 The installer writes only `plugin.js` and the validated manifest as `plugin.json`.

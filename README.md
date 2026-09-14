@@ -46,7 +46,7 @@ To disable an extension for the current project:
 
 ## Build an extension
 
-Start with the [author guide](https://github.com/0sec-labs/0sec/blob/main/docs/HACKSTORE.md)
+Start with the [author guide](https://docs.0.security/hackstore/)
 for the runtime protocol and local testing. Authoring commands follow the harness
 source; older installed releases may not include `0sec hackstore`.
 

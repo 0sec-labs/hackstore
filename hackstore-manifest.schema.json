@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://raw.githubusercontent.com/0sec-labs/hackstore/main/hackstore-manifest.schema.json",
   "title": "Hackstore extension manifest",
-  "description": "A Hackstore extension's manifest.json: a PluginManifest declaring one or more tools, each gated by a closed set of capabilities. Mirrors validatePluginManifest in @0sec/core (packages/core/src/plugins/manifest.ts). Themes and config artifacts use a different shape and are out of scope for this schema.",
+  "description": "Manifest checks for Hackstore tool extensions. The 0sec runtime validator performs additional semantic checks and is authoritative at install time. Declared capabilities inform host approval, not operating-system isolation.",
   "type": "object",
   "required": ["id", "name", "version", "tools"],
   "additionalProperties": true,
@@ -49,7 +49,7 @@
   "definitions": {
     "capability": {
       "type": "string",
-      "description": "A capability from the closed set. Each maps onto a concrete authorization gate the console already enforces for built-in tools.",
+      "description": "Declared tool behavior used by host approval rules. Does not restrict the plugin process at the operating-system level.",
       "enum": [
         "compute",
         "model-call",
@@ -82,7 +82,7 @@
           "type": "object",
           "description": "A JSON-schema-ish properties bag (a map of parameter name to a schema object or boolean), passed through to the tool definition. This is a properties bag, not a complete JSON Schema.",
           "additionalProperties": {
-            "type": ["object", "boolean"]
+            "anyOf": [{ "type": "object" }, { "type": "boolean" }]
           }
         },
         "required": {

@@ -1,53 +1,77 @@
 # Hackstore
 
-The community extension store for [0sec](https://0.security) — the open,
-extensible cybersecurity harness.
+Add tools to [0sec](https://github.com/0sec-labs/0sec). Share the tools you build.
 
-A Hackstore extension adds **tools** to the 0sec agent: a recon helper, a niche
-scanner wrapper, a custom reporting tool, a theme. Extensions are declared by a
-**manifest** and distributed through this repo's `index.json`. The 0sec CLI
-fetches this index (over https), shows the extensions in its in-app store
-(`/hackstore`), and installs the ones an operator chooses.
+An extension gives the 0sec agent a tool it can call during a scan. Use one to
+run a scanner, test a custom framework, or work with your own hardware.
+This repository holds the extension source and the registry the CLI reads.
 
-**Trust model, in one line:** installing writes files and runs *nothing*;
-enabling records one operator approval; an extension's tools run only at scan
-time, only once enabled. See the full model in
-[the author guide](https://github.com/0sec-labs/0sec/blob/main/docs/HACKSTORE.md).
+## Use an extension
 
-## Use the store
+Install [0sec](https://github.com/0sec-labs/0sec#get-started) and check the commands
+available in your version:
 
-It's on by default — open `/hackstore` in the 0sec TUI, or:
-
-```
-0sec plugin search
-0sec plugin install <id>
-0sec plugin enable <id>
+```sh
+0sec --version
+0sec plugin --help
+0sec plugin browse
+0sec plugin install foxguard.scanner
+0sec plugin info foxguard.scanner
+0sec plugin enable foxguard.scanner
 ```
 
-Point somewhere else (or disable it) with `0SEC_REGISTRY_URL` / `--registry`.
+These instructions follow source, not necessarily the latest binary. The tested
+0sec 0.16.3 binary fails in `plugin run` while reading built-in tool definitions.
+Use a harness build containing the `plugin run` registry fix. Foxguard 0.13.2 also
+requires the updated registry entry; source changes here do not update the live
+registry until published.
 
-## Publish an extension
+Review the source before enabling an extension. Installation only writes files.
+Enabled extensions execute code under your user account when loaded. Capability
+declarations inform approval prompts; they do not sandbox the code.
 
-1. **Build it.** `0sec hackstore init my-extension` scaffolds a manifest, an
-   example tool, and a README.
-2. **Validate it.** `0sec hackstore validate ./my-extension` runs the real
-   manifest validator (the same one the CLI enforces on install).
-3. **Submit it.** Fork this repo, add one entry to [`index.json`](./index.json),
-   and open a pull request. Each entry is:
+The [Foxguard extension](extensions/foxguard/) requires the `foxguard` executable
+on `PATH`. Run it on an absolute path you have permission to scan:
 
-   ```json
-   {
-     "id": "you.my-extension",
-     "version": "1.0.0",
-     "manifest": { "...": "your PluginManifest" },
-     "source": { "kind": "inline", "files": { "tool.mjs": "…" } }
-   }
-   ```
+```sh
+0sec plugin run foxguard.scanner foxguard_scan --yes path=/absolute/path/to/project
+```
 
-   Every entry is reviewed in the open before it merges. The
-   [manifest schema](./hackstore-manifest.schema.json) is enforced in CI and by
-   your editor's JSON language server.
+You can also browse the registry with `/hackstore` in the 0sec console.
+To disable an extension for the current project:
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the submission checklist and the
-capability rules (what each declared capability lets a tool do, and which
-approval it triggers).
+```sh
+0sec plugin disable foxguard.scanner
+```
+
+## Build an extension
+
+Start with the [author guide](https://github.com/0sec-labs/0sec/blob/main/docs/HACKSTORE.md)
+for the runtime protocol and local testing. Authoring commands follow the harness
+source; older installed releases may not include `0sec hackstore`.
+
+```sh
+0sec hackstore init my-extension
+0sec hackstore validate ./my-extension
+```
+
+An installable extension needs a manifest and a self-contained `plugin.js`.
+Manifest validation does not execute the plugin or establish that its code is safe.
+See [CONTRIBUTING.md](CONTRIBUTING.md) to package, test, and submit an extension.
+
+## Repository
+
+- [`extensions/`](extensions/): extension source and instructions.
+- [`index.json`](index.json): generated registry consumed by 0sec.
+- [`hackstore-manifest.schema.json`](hackstore-manifest.schema.json): editor and build-time manifest checks. The harness validator is authoritative at install time.
+
+To rebuild and check the registry, use Node.js 22 or newer:
+
+```sh
+npm ci
+npm run build
+npm run check
+npm test
+```
+
+These are local checks. This repository has no CI workflow enforcing them yet.

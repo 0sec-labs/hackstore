@@ -9,6 +9,9 @@ its findings. It does not install or bundle the scanner.
 Install Foxguard using its [installation instructions](https://github.com/0sec-labs/foxguard#install).
 Confirm the executable is on `PATH`, then install and enable the extension:
 
+Use 0sec 0.17.0 or newer for direct CLI calls. Adapter 0.13.2 supports Foxguard
+0.14.0's native v1 JSON reports; the adapter and scanner are versioned separately.
+
 ```sh
 foxguard --version
 0sec plugin install foxguard.scanner

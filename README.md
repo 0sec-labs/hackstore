@@ -20,11 +20,10 @@ available in your version:
 0sec plugin enable foxguard.scanner
 ```
 
-These instructions follow source, not necessarily the latest binary. The tested
-0sec 0.16.3 binary fails in `plugin run` while reading built-in tool definitions.
-Use a harness build containing the `plugin run` registry fix. Foxguard 0.13.2 also
-requires the updated registry entry; source changes here do not update the live
-registry until published.
+Use 0sec 0.17.0 or newer for these commands and direct `plugin run` calls.
+The 0.16.3 binary has a tool-registry bug in `plugin run`. The live community
+registry includes `foxguard.scanner` 0.13.2; its adapter version is independent
+of the installed Foxguard scanner version.
 
 Review the source before enabling an extension. Installation only writes files.
 Enabled extensions execute code under your user account when loaded. Capability
@@ -47,8 +46,8 @@ To disable an extension for the current project:
 ## Build an extension
 
 Start with the [author guide](https://docs.0.security/hackstore/)
-for the runtime protocol and local testing. Authoring commands follow the harness
-source; older installed releases may not include `0sec hackstore`.
+for the runtime protocol and local testing. The authoring commands below are
+available in 0sec 0.17.0 and newer.
 
 ```sh
 0sec hackstore init my-extension
